@@ -40,17 +40,6 @@
 </head>
 <body class="bg-gray-100 text-gray-800">
   <div class="mx-auto">
-    @if (Session::has('error'))
-      <div class="p-4 mb-4 mt-2 mx-2 text-sm text-white bg-red-600 rounded-lg flex justify-between items-center" role="alert">
-        <span>{{ Session::get('error') }}</span>
-        <button type="button" class="text-white" onclick="this.parentElement.remove()">✖</button>
-      </div>
-    @elseif (Session::has('success'))
-      <div class="p-4 mb-4 mt-2 mx-2 text-sm text-white bg-emerald-600 rounded-lg flex justify-between items-center" role="alert">
-        <span>{{ Session::get('success') }}</span>
-        <button type="button" class="text-white" onclick="this.parentElement.remove()">✖</button>
-      </div>
-    @endif
 
     @yield('content')
   </div>
