@@ -35,6 +35,12 @@
   <main class="relative z-10">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
       <div class="mb-6 flex justify-end">
+        @if ($user->role == "Teacher")
+          <a href="{{ route('database') }}" class="me-3 inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-amber-100 hover:bg-white/10">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-9A2.25 2.25 0 002.25 5.25v13.5A2.25 2.25 0 004.5 21h9a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"/></svg>
+            (Teacher) Database 
+          </a>
+        @endif
         <form method="POST" action="{{ route('logout') }}">
           @csrf
           <button type="submit" class="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-amber-100 hover:bg-white/10">

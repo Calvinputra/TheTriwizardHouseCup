@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -24,8 +25,8 @@ class MainController extends Controller
             ['name' => 'Hufflepuff', 'desc' => 'Loyalitas & Kerja Keras',   'ring' => 'ring-amber-400/40', 'bg' => 'from-amber-500/25'],
         ];
         $skills = ['Dueling', 'Charms', 'Potions', 'Quidditch'];
-
-        return view('welcome', compact('houses', 'skills'));
+        $user = Auth::user();
+        return view('welcome', compact('houses', 'skills', 'user'));
     }
 
     public function home()
@@ -137,5 +138,27 @@ class MainController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('login')->with('success', 'Berhasil logout. Sampai jumpa di Hogwarts!');
+    }
+
+    public function database()
+    {
+        $users = User::where('role', '!=', 'Teacher')->get();
+        return view('database', compact('users'));
+    }
+
+    public function updateHouse(Request $request, $id)
+    {
+        $request->validate(['house' => 'required|string|max:50']);
+        $user = User::findOrFail($id);
+        $user->house = $request->house;
+        $user->save();
+
+        return back()->with('success', 'House berhasil diperbarui!');
+    }
+
+    public function destroy($id)
+    {
+        User::findOrFail($id)->delete();
+        return back()->with('success', 'User berhasil dihapus.');
     }
 }
