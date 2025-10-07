@@ -142,8 +142,10 @@ class MainController extends Controller
 
     public function database()
     {
+        $houses = ['Gryffindor','Slytherin', 'Ravenclaw', 'Hufflepuff'
+        ];
         $users = User::where('role', '!=', 'Teacher')->get();
-        return view('database', compact('users'));
+        return view('database', compact('users', 'houses'));
     }
 
     public function updateHouse(Request $request, $id)
