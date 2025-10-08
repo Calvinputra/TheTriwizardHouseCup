@@ -232,7 +232,7 @@
               <div class="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <p class="text-[11px] uppercase tracking-wider text-amber-200/70">Tanggal</p>
-                  <p class="text-sm">{{ \Carbon\Carbon::now('Asia/Jakarta')->translatedFormat('l, d F Y • H:i') }} WIB</p>
+                  <p class="text-sm">Minggu, 26 Oktober • 12.30 WIB</p>
                 </div>
                 <div>
                   <p class="text-[11px] uppercase tracking-wider text-amber-200/70">Ticket No.</p>
@@ -291,7 +291,7 @@
           </p>
           @php
             $gmapsQuery = urlencode('Jl. Kepanduan II, RT.7/RW.16, Pejagalan, Kecamatan Penjaringan, Jkt Utara, Daerah Khusus Ibukota Jakarta 14450');
-            $gmapsUrl = "https://www.google.com/maps?q={$gmapsQuery}";
+            $gmapsUrl = "https://maps.app.goo.gl/GnxUxdEm1KvvE7z27";
           @endphp
           <a href="{{ $gmapsUrl }}" target="_blank" rel="noopener"
              class="mt-3 inline-flex items-center gap-2 rounded-lg border border-emerald-400/30 bg-emerald-50/5 px-3 py-2 text-emerald-100 hover:bg-emerald-400/10 transition">

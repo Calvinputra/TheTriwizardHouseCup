@@ -84,7 +84,7 @@
               </p>
               @php
                 $gmapsQuery = urlencode('Jl. Kepanduan II, RT.7/RW.16, Pejagalan, Kecamatan Penjaringan, Jkt Utara, Daerah Khusus Ibukota Jakarta 14450');
-                $gmapsUrl = "https://www.google.com/maps?q={$gmapsQuery}";
+                $gmapsUrl = "https://maps.app.goo.gl/GnxUxdEm1KvvE7z27";
               @endphp
               <a href="{{ $gmapsUrl }}" target="_blank" rel="noopener"
                  class="mt-3 inline-flex items-center gap-2 rounded-lg border border-emerald-400/30 bg-emerald-50/5 px-3 py-2 text-emerald-100 hover:bg-emerald-400/10 transition">
