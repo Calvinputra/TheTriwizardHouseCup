@@ -5,10 +5,7 @@
 
 @section('content')
 <div class="min-h-screen bg-[#0b0a12] text-[#F1EDE6] relative overflow-hidden">
-  <!-- Mobile subtle top fade -->
   <div class="absolute inset-x-0 top-0 h-2 bg-gradient-to-b from-black/10 to-transparent sm:hidden"></div>
-
-  <!-- Background decorations (sederhana) -->
   <div aria-hidden="true" class="pointer-events-none absolute inset-0">
     <div class="absolute -top-1/2 left-1/2 -translate-x-1/2 h-[120vh] w-[120vw] bg-[radial-gradient(ellipse_at_center,rgba(255,215,128,0.12),rgba(14,12,24,0)_60%)]"></div>
     <div class="absolute -bottom-16 -left-16 h-72 w-72 rounded-full blur-3xl opacity-30 bg-amber-700/40"></div>
@@ -35,9 +32,11 @@
   </header>
 
   <main x-data="{ showForm: false }" class="relative z-10">
+
+
+
     <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 pt-6 lg:pt-10">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-        <!-- Left: Hero / CTA -->
         <div class="flex flex-col justify-center">
           <div class="inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-50/5 px-3 py-1 text-[11px] uppercase tracking-widest text-amber-200 mb-4 w-fit">
             <span class="h-1.5 w-1.5 rounded-full bg-amber-400"></span>
@@ -239,26 +238,65 @@
         </div>
       </div>
     </section>
+    @php
+      $localFile = 'Hogwrats_Video.mp4';
+      $localPath = public_path('videos/' . $localFile);
+      $revealVideo = file_exists($localPath) ? asset('videos/' . $localFile) : null;
+    @endphp
 
-    <!-- Houses Banner -->
-    <section class="pb-12 sm:pb-16">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 sm:gap-4">
-          @foreach($houses as $h)
-            @php
-              $key  = \Illuminate\Support\Str::slug($h['name']);
-              $path = "images/logo_{$key}.png";
-              $logo = file_exists(public_path($path)) ? asset($path) : asset('images/logo_hogwarts.png');
-            @endphp
-            <div class="rounded-xl border border-white/10 bg-gradient-to-br {{ $h['bg'] }} to-transparent p-4 ring-1 {{ $h['ring'] }} flex items-start gap-3">
-              <img src="{{ $logo }}" alt="Logo {{ $h['name'] }}" class="h-10 w-10 shrink-0 object-contain rounded-md bg-white/10 ring-1 ring-white/10" loading="lazy">
-              <div>
-                <p class="text-[11px] uppercase tracking-wider opacity-80">House</p>
-                <p class="text-lg font-bold leading-tight">{{ $h['name'] }}</p>
-                <p class="text-xs opacity-80 mt-1">{{ $h['desc'] }}</p>
+    <!-- Tambahan: Video Hogwarts -->
+    <section class="relative w-full max-w-5xl mx-auto mt-6 sm:mt-8 mb-10 px-4 sm:px-6 lg:px-8">
+          <div class="lg:col-span-2 rounded-2xl border border-amber-400/30 bg-[#0f0c19]/80 p-4">
+            <h3 class="font-semibold mb-2">House of Hogwarts</h3>
+            <div class="relative w-full max-w-[420px] mx-auto border border-white/10 bg-black rounded-xl overflow-hidden">
+              <div class="relative w-full" style="padding-top:177.78%;">
+                <div class="absolute inset-0">
+                  <video
+                    id="houseVideo"
+                    class="w-full h-full object-cover"
+                    controls
+                    autoplay
+                    loop
+                    playsinline
+                    preload="metadata"
+                    src="{{ $revealVideo }}">
+                  </video>
+                </div>
               </div>
             </div>
-          @endforeach
+          </div>
+      <div class="text-center mt-4 text-amber-100/90 text-sm italic">
+        “Welcome to Hogwarts School of Witchcraft and Wizardry — where bravery, wisdom, loyalty, and ambition unite in the greatest magical competition of all time.”
+      </div>
+    </section>
+    <!-- Tambahan: Deskripsi tiap House -->
+    <section class="pb-12 sm:pb-16">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 text-amber-200">House of Hogwarts</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="rounded-xl border border-red-400/30 bg-gradient-to-br from-red-900/40 to-transparent p-5">
+            <img src="{{ asset('images/logo_gryffindor.png') }}" alt="Gryffindor" class="h-12 w-12 mb-3">
+            <h3 class="text-xl font-bold text-red-300">Gryffindor</h3>
+            <p class="text-sm mt-2 text-amber-100/80 leading-relaxed">Tempat bagi mereka yang memiliki keberanian, tekad, dan hati yang besar. Gryffindor melambangkan keberanian dan kehormatan sejati. <br>“Their daring, nerve, and chivalry set Gryffindors apart.”</p>
+          </div>
+
+          <div class="rounded-xl border border-green-400/30 bg-gradient-to-br from-green-900/40 to-transparent p-5">
+            <img src="{{ asset('images/logo_slytherin.png') }}" alt="Slytherin" class="h-12 w-12 mb-3">
+            <h3 class="text-xl font-bold text-green-300">Slytherin</h3>
+            <p class="text-sm mt-2 text-amber-100/80 leading-relaxed">Dikenal karena kecerdikan, ambisi, dan tekad untuk mencapai tujuan apa pun. <br>“Those cunning folks use any means to achieve their ends.”</p>
+          </div>
+
+          <div class="rounded-xl border border-blue-400/30 bg-gradient-to-br from-blue-900/40 to-transparent p-5">
+            <img src="{{ asset('images/logo_ravenclaw.png') }}" alt="Ravenclaw" class="h-12 w-12 mb-3">
+            <h3 class="text-xl font-bold text-blue-300">Ravenclaw</h3>
+            <p class="text-sm mt-2 text-amber-100/80 leading-relaxed">Ravenclaw adalah rumah bagi para pemikir dan penemu. Mereka menghargai kebijaksanaan, kecerdasan, dan imajinasi. <br>“Wit beyond measure is man’s greatest treasure.”</p>
+          </div>
+
+          <div class="rounded-xl border border-yellow-400/30 bg-gradient-to-br from-yellow-800/40 to-transparent p-5">
+            <img src="{{ asset('images/logo_hufflepuff.png') }}" alt="Hufflepuff" class="h-12 w-12 mb-3">
+            <h3 class="text-xl font-bold text-yellow-300">Hufflepuff</h3>
+            <p class="text-sm mt-2 text-amber-100/80 leading-relaxed">Rumah bagi mereka yang setia, sabar, dan pekerja keras. <br>“Those patient Hufflepuffs are true and unafraid of toil.”</p>
+          </div>
         </div>
       </div>
     </section>
@@ -271,4 +309,20 @@
     </div>
   </footer>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const vid = document.getElementById('hogwartsVideo');
+    if (vid) {
+      vid.muted = false;
+      vid.volume = 1.0;
+      const play = () => {
+        const promise = vid.play();
+        if (promise !== undefined) promise.catch(() => vid.controls = true);
+      };
+      play();
+      vid.addEventListener('click', () => play());
+    }
+  });
+</script>
 @endsection
