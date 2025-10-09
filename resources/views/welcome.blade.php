@@ -324,6 +324,19 @@
   </footer>
 </div>
 
+{{-- Tombol kontrol audio di pojok kiri bawah --}}
+<button id="musicToggle"
+  class="fixed bottom-6 left-6 z-50 rounded-full bg-amber-500/80 hover:bg-amber-400 text-[#1b1408] shadow-lg w-12 h-12 flex items-center justify-center transition"
+  title="Putar / Matikan Musik">
+  <svg id="iconPlay" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M8 5v14l11-7z"/>
+  </svg>
+  <svg id="iconPause" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M6 5h4v14H6zM14 5h4v14h-4z"/>
+  </svg>
+</button>
+
+{{-- Elemen audio --}}
 <audio id="bgm" preload="auto" loop playsinline>
   <source src="{{ asset('audio/hogwarts_theme.mp3') }}" type="audio/mpeg">
   <source src="{{ asset('audio/hogwarts_theme.m4a') }}" type="audio/mp4">
@@ -331,23 +344,12 @@
 </audio>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var vid = document.getElementById('hogwartsVideo');
-    if (vid) {
-      vid.muted = false;
-      vid.volume = 1.0;
-      function tryPlayVideo() {
-        var p = vid.play();
-        if (p && typeof p.then === 'function') {
-          p.catch(function(){ vid.controls = true; });
-        }
-      }
-      tryPlayVideo();
-      vid.addEventListener('click', tryPlayVideo);
-    }
-
+  document.addEventListener('DOMContentLoaded', function () {
     var audio = document.getElementById('bgm');
-    if (!audio) return;
+    var btn = document.getElementById('musicToggle');
+    var iconPlay = document.getElementById('iconPlay');
+    var iconPause = document.getElementById('iconPause');
+    var isPlaying = false;
 
     function fadeTo(target, ms){
       var steps = 20;
@@ -358,79 +360,46 @@
       var t = setInterval(function(){
         i++;
         var v = start + delta*i;
-        if (v < 0) v = 0;
-        if (v > 1) v = 1;
-        audio.volume = v;
+        audio.volume = Math.max(0, Math.min(1, v));
         if (i>=steps) clearInterval(t);
       }, stepTime);
     }
 
-    function playNow(){
+    function playMusic() {
       audio.muted = false;
       audio.load();
       audio.volume = 0;
       var p = audio.play();
       if (p && typeof p.then === 'function') {
-        p.then(function(){ fadeTo(0.6, 600); }).catch(function(){});
-      } else {
-        fadeTo(0.6, 600);
+        p.then(function(){
+          fadeTo(0.6, 600);
+          iconPlay.classList.add('hidden');
+          iconPause.classList.remove('hidden');
+          isPlaying = true;
+        }).catch(function(err){
+          console.warn('Autoplay diblokir oleh browser:', err);
+        });
       }
     }
 
-    function onFirstGesture(){
-      playNow();
-      detachGesture();
+    function pauseMusic() {
+      fadeTo(0.0, 400);
+      setTimeout(function(){
+        audio.pause();
+        iconPause.classList.add('hidden');
+        iconPlay.classList.remove('hidden');
+        isPlaying = false;
+      }, 420);
     }
 
-    function attachGesture(){
-      window.addEventListener('pointerdown', onFirstGesture, {passive:true});
-      window.addEventListener('touchend', onFirstGesture, {passive:true});
-      window.addEventListener('click', onFirstGesture);
-      window.addEventListener('keydown', onFirstGesture);
-    }
-
-    function detachGesture(){
-      window.removeEventListener('pointerdown', onFirstGesture);
-      window.removeEventListener('touchend', onFirstGesture);
-      window.removeEventListener('click', onFirstGesture);
-      window.removeEventListener('keydown', onFirstGesture);
-    }
-
-    audio.muted = false;
-    audio.volume = 0;
-
-    var attempt = audio.play();
-    if (attempt && typeof attempt.then === 'function') {
-      attempt.then(function(){
-        fadeTo(0.6, 600);
-      }).catch(function(){
-        attachGesture();
-      });
-    } else {
-      fadeTo(0.6, 600);
-    }
-
-    document.addEventListener('visibilitychange', function(){
-      if (document.hidden) {
-        try { audio.pause(); } catch(e){}
-      } else {
-        if (audio.paused) {
-          setTimeout(function(){
-            var r = audio.play();
-            if (r && typeof r.then === 'function') {
-              r.then(function(){ fadeTo(0.6, 400); }).catch(function(){ attachGesture(); });
-            }
-          }, 80);
-        }
-      }
+    btn.addEventListener('click', function () {
+      if (isPlaying) pauseMusic(); else playMusic();
     });
 
-    window.addEventListener('pageshow', function(e){
-      if (e.persisted && audio.paused) {
-        var r = audio.play();
-        if (r && typeof r.then === 'function') {
-          r.then(function(){ fadeTo(0.6, 400); }).catch(function(){ attachGesture(); });
-        }
+    // Hentikan otomatis saat tab disembunyikan
+    document.addEventListener('visibilitychange', function(){
+      if (document.hidden && isPlaying){
+        pauseMusic();
       }
     });
   });
