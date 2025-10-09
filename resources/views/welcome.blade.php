@@ -324,9 +324,8 @@
   </footer>
 </div>
 
-{{-- Tombol kontrol audio di pojok kiri bawah --}}
 <button id="musicToggle"
-  class="fixed bottom-6 left-6 z-50 rounded-full bg-amber-500/80 hover:bg-amber-400 text-[#1b1408] shadow-lg w-12 h-12 flex items-center justify-center transition"
+  class="fixed bottom-6 right-6 z-50 rounded-full bg-amber-500/80 hover:bg-amber-400 text-[#1b1408] shadow-lg w-12 h-12 flex items-center justify-center transition"
   title="Putar / Matikan Musik">
   <svg id="iconPlay" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
     <path d="M8 5v14l11-7z"/>
@@ -336,7 +335,6 @@
   </svg>
 </button>
 
-{{-- Elemen audio --}}
 <audio id="bgm" preload="auto" loop playsinline>
   <source src="{{ asset('audio/hogwarts_theme.mp3') }}" type="audio/mpeg">
   <source src="{{ asset('audio/hogwarts_theme.m4a') }}" type="audio/mp4">
@@ -351,6 +349,7 @@
     var iconPause = document.getElementById('iconPause');
     var isPlaying = false;
 
+    // Efek fade halus untuk transisi volume
     function fadeTo(target, ms){
       var steps = 20;
       var stepTime = Math.max(10, Math.floor(ms/steps));
@@ -365,6 +364,7 @@
       }, stepTime);
     }
 
+    // Fungsi untuk memutar musik
     function playMusic() {
       audio.muted = false;
       audio.load();
@@ -382,6 +382,7 @@
       }
     }
 
+    // Fungsi untuk menghentikan musik
     function pauseMusic() {
       fadeTo(0.0, 400);
       setTimeout(function(){
@@ -392,11 +393,12 @@
       }, 420);
     }
 
+    // Saat tombol diklik
     btn.addEventListener('click', function () {
       if (isPlaying) pauseMusic(); else playMusic();
     });
 
-    // Hentikan otomatis saat tab disembunyikan
+    // Otomatis berhenti kalau tab ditinggalkan
     document.addEventListener('visibilitychange', function(){
       if (document.hidden && isPlaying){
         pauseMusic();
