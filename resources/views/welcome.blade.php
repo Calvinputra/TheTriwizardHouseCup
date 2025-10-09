@@ -31,9 +31,21 @@
     </div>
   </header>
 
-  <main x-data="{ showForm: false }" class="relative z-10">
-
-
+  <main x-data="{
+      showForm:false,
+      openFormAndScroll(){
+        this.showForm = true;
+        const target = document.getElementById('formSection');
+        if (!target) return;
+        const smooth = () => target.scrollIntoView({behavior:'smooth', block:'start'});
+        try { smooth(); } catch (e) {
+          const rect = target.getBoundingClientRect();
+          const offset = window.pageYOffset + rect.top - 24;
+          window.scrollTo({top: offset, left: 0, behavior: 'smooth'});
+        }
+        setTimeout(() => { document.getElementById('wizard-name')?.focus(); }, 600);
+      }
+    }" class="relative z-10">
 
     <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 pt-6 lg:pt-10">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
@@ -51,26 +63,13 @@
             <br>Satu halaman ini menyediakan pilihan untuk <span class="font-semibold">Daftar</span> atau langsung <span class="font-semibold">Login</span> jika kamu sudah memiliki akun.
           </p>
 
-          <div class="mt-5 sm:mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-            <button
-              @click="showForm = true; $nextTick(() => { document.getElementById('wizard-name')?.focus(); })"
-              class="inline-flex w-full sm:w-auto justify-center items-center gap-2 rounded-lg bg-amber-500 px-5 py-3 font-semibold text-[#1b1408] hover:bg-amber-400 active:scale-[.99] shadow-[0_4px_24px_rgba(245,158,11,0.25)]">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5"><path d="M11.25 4.5l.338 2.369a2.25 2.25 0 001.943 1.943L15.9 9.15l-2.369.338a2.25 2.25 0 00-1.943 1.943L11.25 13.5l-.338-2.069a2.25 2.25 0 00-1.943-1.943L6.6 9.15l2.369-.338a2.25 2.25 0 001.943-1.943L11.25 4.5z"/></svg>
-              Daftarkan Diri
-            </button>
-
-            <a href="{{ route('login') }}" class="inline-flex w-full sm:w-auto justify-center items-center gap-2 rounded-lg border border-amber-400/30 bg-amber-50/5 px-5 py-3 text-amber-100/90 hover:bg-amber-400/10">
-              Sudah punya akun? Login
-            </a>
-          </div>
-
           <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl sm:max-w-none">
             <div class="rounded-xl border border-amber-400/20 bg-white/5 p-4">
               <p class="text-sm text-amber-200">Hadiah</p>
               <p class="text-lg font-semibold">Piala Triwizard</p>
             </div>
             <div class="rounded-xl border border-indigo-400/20 bg-white/5 p-4">
-              <p class="text-sm text-indigo-200">Tanggal & Jam</p>
+              <p class="text-sm text-indigo-200">Tanggal dan Jam</p>
               <p class="text-lg font-semibold">Minggu, 26 Oktober • 12.30 WIB</p>
             </div>
           </div>
@@ -95,181 +94,51 @@
           </div>
         </div>
 
-        <!-- Right: Card + Form (toggle) -->
         <div class="relative mt-8 lg:mt-0">
           <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl max-w-xl mx-auto lg:max-w-none">
             <div class="p-6 sm:p-8">
               <div class="flex items-start justify-between gap-4">
                 <div>
-                  <h3 class="text-xl font-bold">Form Pendaftaran — Triwizard House Cup</h3>
-                  <p class="text-amber-100/70 text-sm">Isi data di bawah ini untuk mewakili rumah pilihanmu.</p>
+                  <h3 class="text-xl font-bold">House of Hogwarts</h3>
+                  <p class="text-amber-100/70 text-sm">Tonton video pengantar sebelum mendaftar.</p>
                 </div>
-                <button @click="showForm = !showForm" class="inline-flex items-center gap-2 rounded-lg border border-amber-400/30 bg-amber-50/5 px-3 py-1.5 text-xs hover:bg-amber-400/10">
-                  <span x-text="showForm ? 'Sembunyikan' : 'Tampilkan'"></span>
-                </button>
+                <a href="#formSection" @click.prevent="openFormAndScroll()" class="inline-flex items-center gap-2 rounded-lg border border-amber-400/30 bg-amber-50/5 px-3 py-1.5 text-xs hover:bg-amber-400/10">
+                  Daftarkan Diri
+                </a>
               </div>
-
-                <form x-show="showForm" x-cloak
-                        method="POST" action="{{ route('register') }}" enctype="multipart/form-data"
-                        class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5"
-                        x-data="{
-                            name:'', nickname:'', email:'', phone:'', age:'', motivation:'',
-                            emailTouched:false, phoneTouched:false,
-                            isEmailValid(){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email); },
-                            isPhoneValid(){ return /^08\d{6,}$/.test(this.phone); } // diawali 08, total min 8 digit
-                        }"
-                        @submit.prevent="
-                            if(!isEmailValid()){ emailTouched = true }
-                            if(!isPhoneValid()){ phoneTouched = true }
-                            if(isEmailValid() && isPhoneValid()) $el.submit();
-                        ">
-                    @csrf
-
-                    <!-- Nama -->
-                    <div class="sm:col-span-2">
-                        <label for="wizard-name" class="block text-sm mb-1">Nama Lengkap</label>
-                        <input id="wizard-name" name="name" type="text" required placeholder="Harry James Potter"
-                            x-model="name"
-                            class="w-full rounded-lg bg-[#0e0c17]/60 border border-white/10 text-amber-50 placeholder:text-amber-200/40 px-3 py-2.5 focus:border-amber-400 focus:ring-amber-400/20"/>
-                        @error('name')<p class="mt-1 text-xs text-rose-400">{{ $message }}</p>@enderror
+              @php
+                $localFile = 'Hogwrats_Video.mp4';
+                $localPath = public_path('videos/' . $localFile);
+                $revealVideo = file_exists($localPath) ? asset('videos/' . $localFile) : null;
+              @endphp
+              <div class="mt-4">
+                <div class="relative w-full max-w-[520px] mx-auto border border-white/10 bg-black rounded-xl overflow-hidden">
+                  <div class="relative w-full" style="padding-top:177.78%;">
+                    <div class="absolute inset-0">
+                      <video
+                        id="hogwartsVideo"
+                        class="w-full h-full object-cover"
+                        controls
+                        autoplay
+                        loop
+                        playsinline
+                        preload="metadata"
+                        src="{{ $revealVideo }}">
+                      </video>
                     </div>
-
-                    <!-- Nickname -->
-                    <div>
-                        <label for="wizard-nickname" class="block text-sm mb-1">Nickname</label>
-                        <input id="wizard-nickname" name="nickname" type="text" required placeholder="Mis. Momo, Stranger"
-                            x-model="nickname"
-                            class="w-full rounded-lg bg-[#0e0c17]/60 border border-white/10 text-amber-50 placeholder:text-amber-200/40 px-3 py-2.5 focus:border-amber-400 focus:ring-amber-400/20"/>
-                        @error('nickname')<p class="mt-1 text-xs text-rose-400">{{ $message }}</p>@enderror
-                    </div>
-
-                    <!-- Email -->
-                    <div>
-                        <label for="wizard-email" class="block text-sm mb-1">Email</label>
-                        <input id="wizard-email" name="email" type="email" required placeholder="harry@gmail.com"
-                            x-model="email" @blur="emailTouched = true"
-                            class="w-full rounded-lg bg-[#0e0c17]/60 border border-white/10 text-amber-50 placeholder:text-amber-200/40 px-3 py-2.5 focus:border-amber-400 focus:ring-amber-400/20"/>
-                        @error('email')<p class="mt-1 text-xs text-rose-400">{{ $message }}</p>@enderror
-                        <p x-show="emailTouched && !isEmailValid()" class="mt-1 text-xs text-rose-400">
-                        Email harus format valid, mengandung @ dan domain (contoh: nama@domain.com).
-                        </p>
-                    </div>
-
-                    <!-- Telepon -->
-                    <div>
-                        <label for="wizard-phone" class="block text-sm mb-1">No. Telepon (WhatsApp)</label>
-                        <input id="wizard-phone" name="phone" type="tel" inputmode="numeric" required placeholder="08xxxxxxxxxx"
-                            x-model="phone" pattern="^08\d{6,}$"
-                            @input="phone = phone.replace(/[^0-9]/g,'')" @blur="phoneTouched = true"
-                            class="w-full rounded-lg bg-[#0e0c17]/60 border border-white/10 text-amber-50 placeholder:text-amber-200/40 px-3 py-2.5 focus:border-amber-400 focus:ring-amber-400/20"/>
-                        @error('phone')<p class="mt-1 text-xs text-rose-400">{{ $message }}</p>@enderror
-                        <p x-show="phoneTouched && !isPhoneValid()" class="mt-1 text-xs text-rose-400">
-                        Nomor harus angka, diawali 08, dan minimal 8 digit.
-                        </p>
-                    </div>
-
-                    <!-- Umur -->
-                    <div>
-                        <label for="wizard-age" class="block text-sm mb-1">Umur</label>
-                        <input id="wizard-age" name="age" type="number" min="11" max="30" required placeholder="21"
-                            x-model="age"
-                            class="w-full rounded-lg bg-[#0e0c17]/60 border border-white/10 text-amber-50 placeholder:text-amber-200/40 px-3 py-2.5 focus:border-amber-400 focus:ring-amber-400/20"/>
-                        @error('age')<p class="mt-1 text-xs text-rose-400">{{ $message }}</p>@enderror
-                    </div>
-
-                    <!-- Motivasi -->
-                    <div class="sm:col-span-2">
-                        <label for="motivation" class="block text-sm mb-1">Motivasi</label>
-                        <textarea id="motivation" name="motivation" rows="3" x-model="motivation"
-                                placeholder="Ceritakan kenapa kamu pantas mewakili rumahmu..." class="w-full rounded-lg bg-[#0e0c17]/60 border border-white/10 text-amber-50 placeholder:text-amber-200/40 px-3 py-2.5 focus:border-amber-400 focus:ring-amber-400/20"></textarea>
-                        @error('motivation')<p class="mt-1 text-xs text-rose-400">{{ $message }}</p>@enderror
-                    </div>
-
-                    <!-- === Tambahan: Pertanyaan Kepribadian (1–5) === -->
-                    <div class="sm:col-span-2">
-                      <label class="block text-sm mb-2">Pertanyaan Kepribadian (1 = sangat tidak setuju, 5 = sangat setuju)</label>
-                      @php
-                        $questions = [
-                          'q1' => 'Saya senang bekerja sama dalam tim untuk meraih tujuan bersama.',
-                          'q2' => 'Saya tetap tenang dan fokus saat menghadapi tekanan.',
-                          'q3' => 'Saya mudah beradaptasi dengan aturan dan situasi baru.',
-                          'q4' => 'Saya berani mengambil inisiatif ketika melihat peluang.',
-                          'q5' => 'Saya disiplin dalam mempersiapkan diri sebelum bertanding.'
-                        ];
-                      @endphp
-                      <div class="space-y-4">
-                        @foreach($questions as $key => $text)
-                          <div>
-                            <p class="text-sm mb-2">{{ $loop->iteration }}. {{ $text }}</p>
-                            <div class="grid grid-cols-5 gap-2">
-                              @for($i=1; $i<=5; $i++)
-                                <div>
-                                  <input class="peer hidden" type="radio" id="{{ $key }}-{{ $i }}" name="{{ $key }}" value="{{ $i }}" @if($i===1) required @endif>
-                                  <label for="{{ $key }}-{{ $i }}" class="flex items-center justify-center rounded-md border border-white/15 bg-[#0e0c17]/60 px-0 py-2 text-sm text-amber-100 hover:bg-white/10 peer-checked:bg-amber-500 peer-checked:text-[#1b1408] peer-checked:border-amber-400 select-none">{{ $i }}</label>
-                                </div>
-                              @endfor
-                            </div>
-                            @error($key)<p class="mt-1 text-xs text-rose-400">{{ $message }}</p>@enderror
-                          </div>
-                        @endforeach
-                      </div>
-                    </div>
-                    <!-- === Akhir Tambahan === -->
-
-                    <!-- Persetujuan -->
-                    <div class="sm:col-span-2 flex items-start gap-3">
-                        <input id="consent" name="consent" type="checkbox" required class="mt-1 h-4 w-4 rounded border-white/20 bg-[#0e0c17] text-amber-500 focus:ring-amber-400">
-                        <label for="consent" class="text-sm">Saya menyetujui aturan Hogwarts dan siap bertanding secara sportif.</label>
-                    </div>
-
-                    <!-- Actions -->
-                    <div class="sm:col-span-2 mt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                        <button type="submit" class="inline-flex w-full sm:w-auto justify-center items-center gap-2 rounded-lg bg-amber-500 px-5 py-3 font-semibold text-[#1b1408] hover:bg-amber-400 active:scale-[.99]">
-                        Kirim Pendaftaran
-                        </button>
-                    </div>
-                </form>
-
-              <div x-show="!showForm" x-cloak class="mt-6 rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-amber-100/80">
-                Klik <span class="font-semibold text-amber-200">“Daftarkan Diri”</span> untuk menampilkan formulir. Jika sudah punya akun, langsung <a href="{{ route('login') }}" class="underline decoration-amber-400/60 hover:text-amber-200">login</a>.
+                  </div>
+                </div>
+                <div class="text-center mt-4 text-amber-100/90 text-sm italic">
+                  “Welcome to Hogwarts School of Witchcraft and Wizardry — where bravery, wisdom, loyalty, and ambition unite in the greatest magical competition of all time.”
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-    @php
-      $localFile = 'Hogwrats_Video.mp4';
-      $localPath = public_path('videos/' . $localFile);
-      $revealVideo = file_exists($localPath) ? asset('videos/' . $localFile) : null;
-    @endphp
 
-    <!-- Tambahan: Video Hogwarts -->
-    <section class="relative w-full max-w-5xl mx-auto mt-6 sm:mt-8 mb-10 px-4 sm:px-6 lg:px-8">
-          <div class="lg:col-span-2 rounded-2xl border border-amber-400/30 bg-[#0f0c19]/80 p-4">
-            <h3 class="font-semibold mb-2">House of Hogwarts</h3>
-            <div class="relative w-full max-w-[420px] mx-auto border border-white/10 bg-black rounded-xl overflow-hidden">
-              <div class="relative w-full" style="padding-top:177.78%;">
-                <div class="absolute inset-0">
-                  <video
-                    id="houseVideo"
-                    class="w-full h-full object-cover"
-                    controls
-                    autoplay
-                    loop
-                    playsinline
-                    preload="metadata"
-                    src="{{ $revealVideo }}">
-                  </video>
-                </div>
-              </div>
-            </div>
-          </div>
-      <div class="text-center mt-4 text-amber-100/90 text-sm italic">
-        “Welcome to Hogwarts School of Witchcraft and Wizardry — where bravery, wisdom, loyalty, and ambition unite in the greatest magical competition of all time.”
       </div>
     </section>
-    <!-- Tambahan: Deskripsi tiap House -->
+
     <section class="pb-12 sm:pb-16">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 text-amber-200">House of Hogwarts</h2>
@@ -277,29 +146,174 @@
           <div class="rounded-xl border border-red-400/30 bg-gradient-to-br from-red-900/40 to-transparent p-5">
             <img src="{{ asset('images/logo_gryffindor.png') }}" alt="Gryffindor" class="h-12 w-12 mb-3">
             <h3 class="text-xl font-bold text-red-300">Gryffindor</h3>
-            <p class="text-sm mt-2 text-amber-100/80 leading-relaxed">Tempat bagi mereka yang memiliki keberanian, tekad, dan hati yang besar. Gryffindor melambangkan keberanian dan kehormatan sejati. <br>“Their daring, nerve, and chivalry set Gryffindors apart.”</p>
+            <p class="text-sm mt-2 text-amber-100/80 leading-relaxed">Tempat bagi mereka yang memiliki keberanian, tekad, dan hati yang besar. Gryffindor melambangkan keberanian dan kehormatan sejati. “Their daring, nerve, and chivalry set Gryffindors apart.”</p>
           </div>
-
           <div class="rounded-xl border border-green-400/30 bg-gradient-to-br from-green-900/40 to-transparent p-5">
             <img src="{{ asset('images/logo_slytherin.png') }}" alt="Slytherin" class="h-12 w-12 mb-3">
             <h3 class="text-xl font-bold text-green-300">Slytherin</h3>
-            <p class="text-sm mt-2 text-amber-100/80 leading-relaxed">Dikenal karena kecerdikan, ambisi, dan tekad untuk mencapai tujuan apa pun. <br>“Those cunning folks use any means to achieve their ends.”</p>
+            <p class="text-sm mt-2 text-amber-100/80 leading-relaxed">Dikenal karena kecerdikan, ambisi, dan tekad untuk mencapai tujuan apa pun. “Those cunning folks use any means to achieve their ends.”</p>
           </div>
-
           <div class="rounded-xl border border-blue-400/30 bg-gradient-to-br from-blue-900/40 to-transparent p-5">
             <img src="{{ asset('images/logo_ravenclaw.png') }}" alt="Ravenclaw" class="h-12 w-12 mb-3">
             <h3 class="text-xl font-bold text-blue-300">Ravenclaw</h3>
-            <p class="text-sm mt-2 text-amber-100/80 leading-relaxed">Ravenclaw adalah rumah bagi para pemikir dan penemu. Mereka menghargai kebijaksanaan, kecerdasan, dan imajinasi. <br>“Wit beyond measure is man’s greatest treasure.”</p>
+            <p class="text-sm mt-2 text-amber-100/80 leading-relaxed">Ravenclaw adalah rumah bagi para pemikir dan penemu. Mereka menghargai kebijaksanaan, kecerdasan, dan imajinasi. “Wit beyond measure is man’s greatest treasure.”</p>
           </div>
-
           <div class="rounded-xl border border-yellow-400/30 bg-gradient-to-br from-yellow-800/40 to-transparent p-5">
             <img src="{{ asset('images/logo_hufflepuff.png') }}" alt="Hufflepuff" class="h-12 w-12 mb-3">
             <h3 class="text-xl font-bold text-yellow-300">Hufflepuff</h3>
-            <p class="text-sm mt-2 text-amber-100/80 leading-relaxed">Rumah bagi mereka yang setia, sabar, dan pekerja keras. <br>“Those patient Hufflepuffs are true and unafraid of toil.”</p>
+            <p class="text-sm mt-2 text-amber-100/80 leading-relaxed">Rumah bagi mereka yang setia, sabar, dan pekerja keras. “Those patient Hufflepuffs are true and unafraid of toil.”</p>
           </div>
         </div>
       </div>
     </section>
+
+    <div class="my-5 mx-4 sm:mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <button
+        @click="openFormAndScroll()"
+        class="inline-flex w-full sm:w-auto justify-center items-center gap-2 rounded-lg bg-amber-500 px-5 py-3 font-semibold text-[#1b1408] hover:bg-amber-400 active:scale-[.99] shadow-[0_4px_24px_rgba(245,158,11,0.25)]">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5"><path d="M11.25 4.5l.338 2.369a2.25 2.25 0 001.943 1.943L15.9 9.15l-2.369.338a2.25 2.25 0 00-1.943 1.943L11.25 13.5l-.338-2.069a2.25 2.25 0 00-1.943-1.943L6.6 9.15l2.369-.338a2.25 2.25 0 001.943-1.943L11.25 4.5z"/></svg>
+        Daftarkan Diri
+      </button>
+
+      <a href="{{ route('login') }}" class="inline-flex w-full sm:w-auto justify-center items-center gap-2 rounded-lg border border-amber-400/30 bg-amber-50/5 px-5 py-3 text-amber-100/90 hover:bg-amber-400/10">
+        Sudah punya akun? Login
+      </a>
+    </div>
+
+    <section id="formSection" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl max-w-xl mx-auto lg:max-w-none lg:col-span-2">
+          <div class="p-6 sm:p-8">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h3 class="text-xl font-bold">Form Pendaftaran — Triwizard House Cup</h3>
+                <p class="text-amber-100/70 text-sm">Isi data di bawah ini untuk mewakili rumah pilihanmu.</p>
+              </div>
+              <button @click="showForm = !showForm" class="inline-flex items-center gap-2 rounded-lg border border-amber-400/30 bg-amber-50/5 px-3 py-1.5 text-xs hover:bg-amber-400/10">
+                <span x-text="showForm ? 'Sembunyikan' : 'Tampilkan'"></span>
+              </button>
+            </div>
+
+            <form x-show="showForm" x-cloak
+                  method="POST" action="{{ route('register') }}" enctype="multipart/form-data"
+                  class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5"
+                  x-data="{
+                      name:'', nickname:'', email:'', phone:'', age:'', motivation:'',
+                      emailTouched:false, phoneTouched:false,
+                      isEmailValid(){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email); },
+                      isPhoneValid(){ return /^08\d{6,}$/.test(this.phone); }
+                  }"
+                  @submit.prevent="
+                      if(!isEmailValid()){ emailTouched = true }
+                      if(!isPhoneValid()){ phoneTouched = true }
+                      if(isEmailValid() && isPhoneValid()) $el.submit();
+                  ">
+              @csrf
+
+              <div class="sm:col-span-2">
+                <label for="wizard-name" class="block text-sm mb-1">Nama Lengkap</label>
+                <input id="wizard-name" name="name" type="text" required placeholder="Harry James Potter"
+                       x-model="name"
+                       class="w-full rounded-lg bg-[#0e0c17]/60 border border-white/10 text-amber-50 placeholder:text-amber-200/40 px-3 py-2.5 focus:border-amber-400 focus:ring-amber-400/20"/>
+                @error('name')<p class="mt-1 text-xs text-rose-400">{{ $message }}</p>@enderror
+              </div>
+
+              <div>
+                <label for="wizard-nickname" class="block text-sm mb-1">Nickname</label>
+                <input id="wizard-nickname" name="nickname" type="text" required placeholder="Mis. Momo, Stranger"
+                       x-model="nickname"
+                       class="w-full rounded-lg bg-[#0e0c17]/60 border border-white/10 text-amber-50 placeholder:text-amber-200/40 px-3 py-2.5 focus:border-amber-400 focus:ring-amber-400/20"/>
+                @error('nickname')<p class="mt-1 text-xs text-rose-400">{{ $message }}</p>@enderror
+              </div>
+
+              <div>
+                <label for="wizard-email" class="block text-sm mb-1">Email</label>
+                <input id="wizard-email" name="email" type="email" required placeholder="harry@gmail.com"
+                       x-model="email" @blur="emailTouched = true"
+                       class="w-full rounded-lg bg-[#0e0c17]/60 border border-white/10 text-amber-50 placeholder:text-amber-200/40 px-3 py-2.5 focus:border-amber-400 focus:ring-amber-400/20"/>
+                @error('email')<p class="mt-1 text-xs text-rose-400">{{ $message }}</p>@enderror
+                <p x-show="emailTouched && !isEmailValid()" class="mt-1 text-xs text-rose-400">
+                  Email harus format valid, mengandung @ dan domain seperti nama@domain.com.
+                </p>
+              </div>
+
+              <div>
+                <label for="wizard-phone" class="block text-sm mb-1">Nomor Telepon WhatsApp</label>
+                <input id="wizard-phone" name="phone" type="tel" inputmode="numeric" required placeholder="08xxxxxxxxxx"
+                       x-model="phone" pattern="^08\d{6,}$"
+                       @input="phone = phone.replace(/[^0-9]/g,'')" @blur="phoneTouched = true"
+                       class="w-full rounded-lg bg-[#0e0c17]/60 border border-white/10 text-amber-50 placeholder:text-amber-200/40 px-3 py-2.5 focus:border-amber-400 focus:ring-amber-400/20"/>
+                @error('phone')<p class="mt-1 text-xs text-rose-400">{{ $message }}</p>@enderror
+                <p x-show="phoneTouched && !isPhoneValid()" class="mt-1 text-xs text-rose-400">
+                  Nomor harus angka, diawali 08, dan minimal delapan digit.
+                </p>
+              </div>
+
+              <div>
+                <label for="wizard-age" class="block text-sm mb-1">Umur</label>
+                <input id="wizard-age" name="age" type="number" min="11" max="30" required placeholder="21"
+                       x-model="age"
+                       class="w-full rounded-lg bg-[#0e0c17]/60 border border-white/10 text-amber-50 placeholder:text-amber-200/40 px-3 py-2.5 focus:border-amber-400 focus:ring-amber-400/20"/>
+                @error('age')<p class="mt-1 text-xs text-rose-400">{{ $message }}</p>@enderror
+              </div>
+
+              <div class="sm:col-span-2">
+                <label for="motivation" class="block text-sm mb-1">Motivasi</label>
+                <textarea id="motivation" name="motivation" rows="3" x-model="motivation"
+                          placeholder="Ceritakan kenapa kamu pantas mewakili rumahmu..."
+                          class="w-full rounded-lg bg-[#0e0c17]/60 border border-white/10 text-amber-50 placeholder:text-amber-200/40 px-3 py-2.5 focus:border-amber-400 focus:ring-amber-400/20"></textarea>
+                @error('motivation')<p class="mt-1 text-xs text-rose-400">{{ $message }}</p>@enderror
+              </div>
+
+              <div class="sm:col-span-2">
+                <label class="block text-sm mb-2">Pertanyaan Kepribadian (1 sangat tidak setuju, 5 sangat setuju)</label>
+                @php
+                  $questions = [
+                    'q1' => 'Saya senang bekerja sama dalam tim untuk meraih tujuan bersama.',
+                    'q2' => 'Saya tetap tenang dan fokus saat menghadapi tekanan.',
+                    'q3' => 'Saya mudah beradaptasi dengan aturan dan situasi baru.',
+                    'q4' => 'Saya berani mengambil inisiatif ketika melihat peluang.',
+                    'q5' => 'Saya disiplin dalam mempersiapkan diri sebelum bertanding.'
+                  ];
+                @endphp
+                <div class="space-y-4">
+                  @foreach($questions as $key => $text)
+                    <div>
+                      <p class="text-sm mb-2">{{ $loop->iteration }}. {{ $text }}</p>
+                      <div class="grid grid-cols-5 gap-2">
+                        @for($i=1; $i<=5; $i++)
+                          <div>
+                            <input class="peer hidden" type="radio" id="{{ $key }}-{{ $i }}" name="{{ $key }}" value="{{ $i }}" @if($i===1) required @endif>
+                            <label for="{{ $key }}-{{ $i }}" class="flex items-center justify-center rounded-md border border-white/15 bg-[#0e0c17]/60 px-0 py-2 text-sm text-amber-100 hover:bg-white/10 peer-checked:bg-amber-500 peer-checked:text-[#1b1408] peer-checked:border-amber-400 select-none">{{ $i }}</label>
+                          </div>
+                        @endfor
+                      </div>
+                      @error($key)<p class="mt-1 text-xs text-rose-400">{{ $message }}</p>@enderror
+                    </div>
+                  @endforeach
+                </div>
+              </div>
+
+              <div class="sm:col-span-2 flex items-start gap-3">
+                <input id="consent" name="consent" type="checkbox" required class="mt-1 h-4 w-4 rounded border-white/20 bg-[#0e0c17] text-amber-500 focus:ring-amber-400">
+                <label for="consent" class="text-sm">Saya menyetujui aturan Hogwarts dan siap bertanding secara sportif.</label>
+              </div>
+
+              <div class="sm:col-span-2 mt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <button type="submit" class="inline-flex w-full sm:w-auto justify-center items-center gap-2 rounded-lg bg-amber-500 px-5 py-3 font-semibold text-[#1b1408] hover:bg-amber-400 active:scale-[.99]">
+                  Kirim Pendaftaran
+                </button>
+              </div>
+            </form>
+
+            <div x-show="!showForm" x-cloak class="mt-6 rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-amber-100/80">
+              Klik <span class="font-semibold text-amber-200">Daftarkan Diri</span> di atas untuk menampilkan formulir. Jika sudah punya akun, langsung <a href="{{ route('login') }}" class="underline decoration-amber-400/60 hover:text-amber-200">login</a>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <footer class="relative z-10 border-t border-white/10">
@@ -310,19 +324,116 @@
   </footer>
 </div>
 
+<audio id="bgm" preload="auto" loop playsinline>
+  <source src="{{ asset('audio/hogwarts_theme.mp3') }}" type="audio/mpeg">
+  <source src="{{ asset('audio/hogwarts_theme.m4a') }}" type="audio/mp4">
+  <source src="{{ asset('audio/hogwarts_theme.ogg') }}" type="audio/ogg">
+</audio>
+
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const vid = document.getElementById('hogwartsVideo');
+  document.addEventListener('DOMContentLoaded', function() {
+    var vid = document.getElementById('hogwartsVideo');
     if (vid) {
       vid.muted = false;
       vid.volume = 1.0;
-      const play = () => {
-        const promise = vid.play();
-        if (promise !== undefined) promise.catch(() => vid.controls = true);
-      };
-      play();
-      vid.addEventListener('click', () => play());
+      function tryPlayVideo() {
+        var p = vid.play();
+        if (p && typeof p.then === 'function') {
+          p.catch(function(){ vid.controls = true; });
+        }
+      }
+      tryPlayVideo();
+      vid.addEventListener('click', tryPlayVideo);
     }
+
+    var audio = document.getElementById('bgm');
+    if (!audio) return;
+
+    function fadeTo(target, ms){
+      var steps = 20;
+      var stepTime = Math.max(10, Math.floor(ms/steps));
+      var start = isNaN(audio.volume) ? 0 : audio.volume;
+      var delta = (target - start)/steps;
+      var i = 0;
+      var t = setInterval(function(){
+        i++;
+        var v = start + delta*i;
+        if (v < 0) v = 0;
+        if (v > 1) v = 1;
+        audio.volume = v;
+        if (i>=steps) clearInterval(t);
+      }, stepTime);
+    }
+
+    function playNow(){
+      audio.muted = false;
+      audio.load();
+      audio.volume = 0;
+      var p = audio.play();
+      if (p && typeof p.then === 'function') {
+        p.then(function(){ fadeTo(0.6, 600); }).catch(function(){});
+      } else {
+        fadeTo(0.6, 600);
+      }
+    }
+
+    function onFirstGesture(){
+      playNow();
+      detachGesture();
+    }
+
+    function attachGesture(){
+      window.addEventListener('pointerdown', onFirstGesture, {passive:true});
+      window.addEventListener('touchend', onFirstGesture, {passive:true});
+      window.addEventListener('click', onFirstGesture);
+      window.addEventListener('keydown', onFirstGesture);
+    }
+
+    function detachGesture(){
+      window.removeEventListener('pointerdown', onFirstGesture);
+      window.removeEventListener('touchend', onFirstGesture);
+      window.removeEventListener('click', onFirstGesture);
+      window.removeEventListener('keydown', onFirstGesture);
+    }
+
+    audio.muted = false;
+    audio.volume = 0;
+
+    var attempt = audio.play();
+    if (attempt && typeof attempt.then === 'function') {
+      attempt.then(function(){
+        fadeTo(0.6, 600);
+      }).catch(function(){
+        attachGesture();
+      });
+    } else {
+      fadeTo(0.6, 600);
+    }
+
+    document.addEventListener('visibilitychange', function(){
+      if (document.hidden) {
+        try { audio.pause(); } catch(e){}
+      } else {
+        if (audio.paused) {
+          setTimeout(function(){
+            var r = audio.play();
+            if (r && typeof r.then === 'function') {
+              r.then(function(){ fadeTo(0.6, 400); }).catch(function(){ attachGesture(); });
+            }
+          }, 80);
+        }
+      }
+    });
+
+    window.addEventListener('pageshow', function(e){
+      if (e.persisted && audio.paused) {
+        var r = audio.play();
+        if (r && typeof r.then === 'function') {
+          r.then(function(){ fadeTo(0.6, 400); }).catch(function(){ attachGesture(); });
+        }
+      }
+    });
   });
 </script>
+
 @endsection
