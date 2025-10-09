@@ -35,7 +35,7 @@
     'ravenclaw' => [
       'title'       => 'Ravenclaw',
       'desc'        => 'Kecerdasan, kreativitas, dan rasa ingin tahu. Mereka mencintai ilmu pengetahuan dan kebijaksanaan.',
-      'leader'      => 'Kepala House: Prof. Kevin',
+      'leader'      => 'Kepala House: Prof. Stevanie',
       'wa'          => "https://chat.whatsapp.com/F7afZs0i1PF0w10xTzhsYF",
     ],
     'hufflepuff' => [

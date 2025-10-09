@@ -63,6 +63,7 @@ class MainController extends Controller
             'email'      => 'required|email|unique:users,email',
             'phone'      => 'required|regex:/^08[0-9]{6,}$/|max:15',
             'age'        => 'required|integer|min:11|max:30',
+            'desired_house' => 'nullable|string|max:500',
             'motivation' => 'nullable|string|max:500',
             'consent'    => 'accepted',
         ], [
@@ -72,6 +73,7 @@ class MainController extends Controller
 
         $userId = DB::table('users')->insertGetId([
             'name'       => $validated['name'],
+            'desired_house'   => $validated['desired_house'],
             'nickname'   => $validated['nickname'],
             'email'      => $validated['email'],
             'phone'      => $validated['phone'],

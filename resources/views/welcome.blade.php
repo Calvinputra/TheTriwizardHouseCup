@@ -102,9 +102,9 @@
                   <h3 class="text-xl font-bold">House of Hogwarts</h3>
                   <p class="text-amber-100/70 text-sm">Tonton video pengantar sebelum mendaftar.</p>
                 </div>
-                <a href="#formSection" @click.prevent="openFormAndScroll()" class="inline-flex items-center gap-2 rounded-lg border border-amber-400/30 bg-amber-50/5 px-3 py-1.5 text-xs hover:bg-amber-400/10">
+                {{-- <a href="#formSection" @click.prevent="openFormAndScroll()" class="inline-flex items-center gap-2 rounded-lg border border-amber-400/30 bg-amber-50/5 px-3 py-1.5 text-xs hover:bg-amber-400/10">
                   Daftarkan Diri
-                </a>
+                </a> --}}
               </div>
               @php
                 $localFile = 'Hogwrats_Video.mp4';
@@ -198,7 +198,7 @@
                   method="POST" action="{{ route('register') }}" enctype="multipart/form-data"
                   class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5"
                   x-data="{
-                      name:'', nickname:'', email:'', phone:'', age:'', motivation:'',
+                      name:'', nickname:'', email:'', phone:'', age:'',desired_house:'', motivation:'',
                       emailTouched:false, phoneTouched:false,
                       isEmailValid(){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email); },
                       isPhoneValid(){ return /^08\d{6,}$/.test(this.phone); }
@@ -255,6 +255,19 @@
                        x-model="age"
                        class="w-full rounded-lg bg-[#0e0c17]/60 border border-white/10 text-amber-50 placeholder:text-amber-200/40 px-3 py-2.5 focus:border-amber-400 focus:ring-amber-400/20"/>
                 @error('age')<p class="mt-1 text-xs text-rose-400">{{ $message }}</p>@enderror
+              </div>
+
+              <div>
+                <label for="desired_house" class="block text-sm mb-1">Rumah Asrama yang Kamu Inginkan</label>
+                <select id="desired_house" name="desired_house" required
+                        class="w-full rounded-lg bg-[#0e0c17]/60 border border-white/10 text-amber-50 px-3 py-2.5 focus:border-amber-400 focus:ring-amber-400/20">
+                    <option value="" disabled selected>Pilih Asrama</option>
+                    <option value="Gryffindor">Gryffindor</option>
+                    <option value="Hufflepuff">Hufflepuff</option>
+                    <option value="Ravenclaw">Ravenclaw</option>
+                    <option value="Slytherin">Slytherin</option>
+                </select>
+                @error('desired_house')<p class="mt-1 text-xs text-rose-400">{{ $message }}</p>@enderror
               </div>
 
               <div class="sm:col-span-2">

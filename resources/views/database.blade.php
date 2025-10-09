@@ -47,6 +47,7 @@
                                 <th class="px-4 py-3 font-semibold tracking-wider text-blue-300">Nama</th>
                                 <th class="px-4 py-3 font-semibold tracking-wider text-blue-300">Email</th>
                                 <th class="px-4 py-3 font-semibold tracking-wider text-blue-300">Nickname</th>
+                                <th class="px-4 py-3 font-semibold tracking-wider text-blue-300">Asrama yang diinginkan</th>
                                 <th class="px-4 py-3 font-semibold tracking-wider text-blue-300">Motivation</th>
                                 <th class="px-4 py-3 font-semibold tracking-wider text-blue-300">Umur</th>
                                 <th class="px-4 py-3 font-semibold tracking-wider text-blue-300">House</th>
@@ -60,6 +61,7 @@
                                     <td class="px-4 py-3 font-semibold text-blue-400">{{ $u->name }}</td>
                                     <td class="px-4 py-3 text-blue-400/80">{{ $u->email }}</td>
                                     <td class="px-4 py-3 text-blue-400/80">{{ $u->nickname ?? '-' }}</td>
+                                    <td class="px-4 py-3 text-blue-400/80">{{ $u->desired_house ?? '-' }}</td>
                                     <td class="px-4 py-3 text-blue-400/80">{{ $u->motivation ?? '-' }}</td>
                                     <td class="px-4 py-3 text-blue-400/80">{{ $u->age ?? '-' }}</td>
                                     <td class="px-4 py-3">
