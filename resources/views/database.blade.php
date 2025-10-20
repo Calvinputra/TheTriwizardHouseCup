@@ -133,14 +133,14 @@
 
                                     @foreach ($ketua as $m)
                                         <li class="font-semibold text-yellow-300">
-                                            {{ $m->name }}
+                                            {{ $m->nickname }}
                                             <span class="ml-1 text-xs bg-yellow-500/20 text-yellow-300 px-2 py-0.5 rounded-full">Ketua</span>
                                             <span class="text-blue-200/60 text-xs">({{ $m->email }})</span>
                                         </li>
                                     @endforeach
 
                                     @foreach ($anggota as $m)
-                                        <li>{{ $m->name }}
+                                        <li>{{ $m->nickname }}
                                             <span class="text-blue-200/60 text-xs">({{ $m->email }})</span>
                                         </li>
                                     @endforeach
