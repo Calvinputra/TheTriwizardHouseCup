@@ -1,7 +1,8 @@
 @extends('main')
 
 @section('title', 'Home | Hogwarts Triwizard Portal')
-@section('description', 'Beranda peserta dengan tiket bergaya Harry Potter, video reveal House, dan tombol gabung
+@section('description',
+    'Beranda peserta dengan tiket bergaya Harry Potter, video reveal House, dan tombol gabung
     WhatsApp Group per House.')
 
 @section('content')
@@ -46,7 +47,7 @@
                 'title' => 'Hufflepuff',
                 'desc' =>
                     'Kerja keras, kesetiaan, dan kejujuran. Para Hufflepuff dikenal rendah hati dan dapat diandalkan.',
-                'leader' => 'Kepala House: Prof. Pinsky',
+                'leader' => 'Kepala House: Prof. Ruby',
                 'wa' => 'https://chat.whatsapp.com/EEzOLolqdXj950QhzlOoaq',
             ],
         ];
@@ -191,7 +192,7 @@
 
                     <div x-show="revealed" x-transition
                         class="relative lg:col-span-2 rounded-2xl border border-amber-400/30 bg-[#0f0c19]/80 shadow-2xl overflow-hidden">
-                          <div class="flex flex-col items-end z-20 px-5 pt-4 text-right">
+                        <div class="flex flex-col items-end z-20 px-5 pt-4 text-right">
                             <div
                                 class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-[#111018]/70 backdrop-blur px-3 py-2 shadow-lg">
                                 <img src="{{ $houseLogoUrl }}" alt="House" class="h-5 w-5 md:h-6 md:w-6 object-contain">
@@ -204,7 +205,7 @@
                             </div>
                             @if (!$rawHouse || trim($rawHouse) === '' || !$hasRealHouse)
                                 <p class="text-amber-100/70 text-sm mt-1">Pengumuman House akan di umumkan pada<span
-                                  class="font-semibold"> 20 Oktober 2025</span>.
+                                        class="font-semibold"> 20 Oktober 2025</span>.
                                 </p>
                             @endif
                             @if ($hasRealHouse)
