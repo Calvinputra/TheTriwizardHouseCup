@@ -25,28 +25,28 @@
                 'title' => 'Gryffindor',
                 'desc' =>
                     'Rumah para pemberani, ksatria, dan berjiwa kepemimpinan. Mereka menjunjung tinggi keberanian, tekad, dan kebajikan.',
-                'leader' => 'Kepala House: Prof. Felicia',
+                'leader' => 'Kepala House: Prof. Rdsvki',
                 'wa' => 'https://chat.whatsapp.com/I14RUYsWkjqJPona0MXojn',
             ],
             'slytherin' => [
                 'title' => 'Slytherin',
                 'desc' =>
                     'Ambisi, kecerdikan, dan tekad kuat. Para murid Slytherin dikenal licin namun cerdas mencapai tujuan.',
-                'leader' => 'Kepala House: Prof. Theodorus',
+                'leader' => 'Kepala House: Prof. Stranger',
                 'wa' => 'https://chat.whatsapp.com/CjdgUonXye20wwCR8uhx7O',
             ],
             'ravenclaw' => [
                 'title' => 'Ravenclaw',
                 'desc' =>
                     'Kecerdasan, kreativitas, dan rasa ingin tahu. Mereka mencintai ilmu pengetahuan dan kebijaksanaan.',
-                'leader' => 'Kepala House: Prof. Stevanie',
+                'leader' => 'Kepala House: Prof. Baymare',
                 'wa' => 'https://chat.whatsapp.com/F7afZs0i1PF0w10xTzhsYF',
             ],
             'hufflepuff' => [
                 'title' => 'Hufflepuff',
                 'desc' =>
                     'Kerja keras, kesetiaan, dan kejujuran. Para Hufflepuff dikenal rendah hati dan dapat diandalkan.',
-                'leader' => 'Kepala House: Prof. Josephine',
+                'leader' => 'Kepala House: Prof. Pinsky',
                 'wa' => 'https://chat.whatsapp.com/EEzOLolqdXj950QhzlOoaq',
             ],
         ];
