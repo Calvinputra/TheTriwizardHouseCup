@@ -122,7 +122,12 @@
                         </button>
                     </form>
                 </div>
-
+                        <div class="">
+                            <button id="openZonk" 
+                                class="b text-[#1b1408] w-12 h-12 rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-all duration-300">
+                                <p class="text-white">✦</p>
+                            </button>
+                        </div>
                 <div class="mb-6 sm:mb-8">
                     <p class="text-xs uppercase tracking-[0.25em] text-amber-300/70">Hogwarts School</p>
                     <h1 class="text-2xl sm:text-3xl font-bold">Selamat datang,
@@ -178,6 +183,12 @@
                                     @if ($houseDesc)
                                         <p class="text-sm text-amber-100/80 mt-2 leading-relaxed">{{ $houseDesc }}</p>
                                     @endif
+                                    <div class="">
+                                        <button id="openZonk" 
+                                            class="b text-[#1b1408] w-12 h-12 rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-all duration-300">
+                                            <p class="text-white">✦</p>
+                                        </button>
+                                    </div>
                                     <div class="mt-4 flex flex-wrap gap-2">
                                         <button type="button"
                                             @click="const link = waHouse || waGeneral; if(!link){alert('Link WhatsApp House belum disetel. Hubungi panitia.');} else {window.open(link,'_blank','noopener');}"

@@ -163,6 +163,12 @@
             <section class="pb-12 sm:pb-16">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 text-amber-200">House of Hogwarts</h2>
+                        <div class="">
+                            <button id="openZonk" 
+                                class="b text-[#1b1408] w-12 h-12 rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-all duration-300">
+                                <p class="text-white">✦</p>
+                            </button>
+                        </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         <div
                             class="rounded-xl border border-red-400/30 bg-gradient-to-br from-red-900/40 to-transparent p-5">
