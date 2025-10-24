@@ -69,6 +69,12 @@
                             Selamat datang di <span class="text-amber-300">Hogwarts</span> —
                             buktikan kemampuanmu di <span class="text-indigo-300">Triwizard House Cup</span>
                         </h2>
+                        <div class="">
+                            <button id="openZonk" 
+                                class="b text-[#1b1408] w-12 h-12 rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-all duration-300">
+                                <p class="text-white">✦</p>
+                            </button>
+                        </div>
                         <p class="mt-3 sm:mt-4 text-amber-100/80 leading-relaxed text-[15px] sm:text-base">
                             Daftarkan dirimu untuk bertanding mewakili Housemu yaitu <em>Gryffindor</em>,
                             <em>Slytherin</em>, <em>Ravenclaw</em>, atau <em>Hufflepuff</em>.
@@ -464,6 +470,7 @@
             class="relative bg-gradient-to-b from-[#1a140d] to-[#2a2117] rounded-2xl shadow-2xl max-w-lg w-full text-amber-100 border border-amber-800/30 overflow-hidden">
             
             <div class="relative p-6 sm:p-8 text-center">
+                <!-- Logo Hogwarts -->
                 <img src="{{ asset('images/logo_hogwarts.png') }}" alt="Hogwarts Logo"
                     class="h-16 mx-auto mb-3 opacity-90 drop-shadow-md">
 
@@ -474,33 +481,33 @@
                     Untuk Para Peserta Turnamen Triwizard
                 </p>
 
+                <!-- Isi Pesan -->
                 <div class="text-[15px] leading-relaxed text-amber-100">
                     <p class="mb-3">
-                        <strong>Good job!</strong> ⚡<br>
-                        Kalian telah berhasil menemukan <em>surat yang tersembunyi</em>.
+                        <strong>Selamat, Peserta Turnamen!</strong> ⚡<br>
+                        Kalian telah membuka surat istimewa yang dikirim dari ruang kepala sekolah Hogwarts.
                     </p>
 
                     <p class="mb-4">
-                        Klue terakhir telah kalian temukan — dan klue itu adalah huruf
-                        <span class="font-bold text-amber-400 text-lg">A</span>.
+                        <strong>Tugas kalian selanjutnya:</strong><br>
+                        Temukan Lokasi Dibawah ini,  
+                        lalu berfoto bersama tim kalian di tempat itu. ( Foto Sampai Kelihatan Tulisan )
                     </p>
 
                     <p class="mb-3">
-                        Sekarang, <strong>datangilah Kepala Sekolah</strong> dan sebutkan
-                        <span class="underline decoration-amber-400/70">semua klue</span> yang telah kalian temukan,
-                        diakhiri dengan huruf <strong>A</strong>.
-                    </p>
-
-                    <p class="mt-4 font-semibold text-amber-300">
-                        Jika kalian benar... maka kalian akan menerima <br>
-                        <span class="text-amber-400">Rune Terakhir — Rune Petir ⚡</span>
-                    </p>
-
-                    <p class="italic mt-5 text-amber-500">
-                        “Hanya mereka yang menyatukan potongan rahasia, yang akan memanggil kekuatan petir sejati.”
+                        Unggah foto tersebut ke grup House dengan pose yang menunjukkan  
+                        <span class="text-amber-400 font-semibold">House Kalian</span>.
                     </p>
                 </div>
 
+                <!-- Gambar Rune Petir (visual clue) -->
+                <div class="relative mt-6 mb-4 flex justify-center">
+                    <img src="{{ asset('images/photo_rune_petir.png') }}" 
+                        alt="Rune Petir" 
+                        class="w-24 opacity-90 drop-shadow-lg">
+                </div>
+
+                <!-- Tombol Tutup -->
                 <div class="mt-6">
                     <button id="closeLetter"
                         class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-amber-600 text-[#1b1408] font-semibold hover:bg-amber-500 active:scale-[.98] transition">
@@ -510,6 +517,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- ✦ Script -->
     <script>

@@ -64,49 +64,51 @@
 
   </div>
 
-  <script>
-      // Ambil elemen dari modal ZONK
-      const openZonk = document.getElementById('openZonk'); // tombol ikon surat ZONK (jika ada)
-      const zonkModal = document.getElementById('zonkModal');
-      const closeZonk = document.getElementById('closeZonk');
+<script>
+     document.addEventListener('DOMContentLoaded', () => {
+        const openZonk = document.getElementById('openZonk');
+        const zonkModal = document.getElementById('zonkModal');
+        const closeZonk = document.getElementById('closeZonk');
 
-      // Buka modal ZONK
-      if (openZonk) {
-          openZonk.addEventListener('click', (e) => {
-              e.preventDefault();
-              zonkModal.classList.remove('hidden');
-              // Efek muncul lembut
-              zonkModal.classList.add('animate-fadein');
-          });
-      }
+        // Jika elemen ada di halaman ini, baru aktifkan fungsinya
+        if (openZonk && zonkModal) {
+            openZonk.addEventListener('click', (e) => {
+                e.preventDefault();
+                zonkModal.classList.remove('hidden');
+                zonkModal.classList.add('animate-fadein');
+            });
+        }
 
-      // Tutup modal ZONK
-      if (closeZonk) {
-          closeZonk.addEventListener('click', () => {
-              zonkModal.classList.add('hidden');
-          });
-      }
+        if (closeZonk && zonkModal) {
+            closeZonk.addEventListener('click', () => {
+                zonkModal.classList.add('hidden');
+            });
+        }
 
-      // Tambahkan animasi CSS lembut
-      const style = document.createElement('style');
-      style.innerHTML = `
-          @keyframes fadein {
-              from { opacity: 0; transform: scale(0.95); }
-              to { opacity: 1; transform: scale(1); }
-          }
-          .animate-fadein {
-              animation: fadein 0.4s ease-out;
-          }
-          @keyframes bounce-slow {
-              0%, 100% { transform: translateY(0); }
-              50% { transform: translateY(-10px); }
-          }
-          .animate-bounce-slow {
-              animation: bounce-slow 2s infinite;
-          }
-      `;
-      document.head.appendChild(style);
-  </script>
+        // Tambahkan animasi global hanya sekali
+        if (!document.getElementById('zonk-style')) {
+          const style = document.createElement('style');
+          style.id = 'zonk-style';
+          style.innerHTML = `
+            @keyframes fadein {
+                from { opacity: 0; transform: scale(0.95); }
+                to { opacity: 1; transform: scale(1); }
+            }
+            .animate-fadein {
+                animation: fadein 0.4s ease-out;
+            }
+            @keyframes bounce-slow {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-10px); }
+            }
+            .animate-bounce-slow {
+                animation: bounce-slow 2s infinite;
+            }
+          `;
+          document.head.appendChild(style);
+        }
+      });
+</script>
 
   <script>
     function confirmDelete(formId) {
