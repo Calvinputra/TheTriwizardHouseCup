@@ -400,7 +400,11 @@
             <div
                 class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-amber-100/70">
                 <p>© {{ date('Y') }} Hogwarts — Triwizard House Cup</p>
-                <p class="flex items-center gap-2">Made with <span class="text-amber-300">✦</span> Coach Pin</p>
+                <p class="flex items-center gap-2">
+                    Made with <span class="text-amber-300">
+                        <a href="#" id="openPuzzle">✦</a>
+                    </span> Coach Pin
+                </p>
             </div>
         </footer>
     </div>
@@ -422,6 +426,177 @@
         <source src="{{ asset('audio/hogwarts_theme.m4a') }}" type="audio/mp4">
         <source src="{{ asset('audio/hogwarts_theme.ogg') }}" type="audio/ogg">
     </audio>
+
+    <div id="puzzleModal"
+        class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 transition">
+        <div
+            class="relative bg-gradient-to-b from-[#1a140d] to-[#2a2117] rounded-2xl shadow-2xl max-w-md w-full text-amber-100 border border-amber-800/30 overflow-hidden">
+            
+            <div class="relative p-6 text-center">
+                <img src="{{ asset('images/logo_hogwarts.png') }}" alt="Hogwarts Logo"
+                    class="h-14 mx-auto mb-4 opacity-90 drop-shadow-md">
+                <h2 class="text-xl font-bold mb-2 tracking-wide text-amber-300">Charm of Numbers</h2>
+                <p class="text-sm italic mb-4 text-amber-200/90">Masukkan 6 angka rahasia untuk membuka surat Hogwarts</p>
+
+                <input id="magicCode" maxlength="6" placeholder="______" 
+                    class="w-40 mx-auto text-center text-2xl font-bold tracking-[0.4em] bg-transparent border-b-2 border-amber-400 focus:outline-none caret-amber-400 text-amber-100 placeholder:text-amber-600" 
+                    type="text">
+
+                <div class="mt-6 flex justify-center gap-3">
+                    <button id="checkCode"
+                        class="px-5 py-2.5 rounded-lg bg-amber-600 text-[#1b1408] font-semibold hover:bg-amber-500 active:scale-[.98] transition">
+                        Buka Surat
+                    </button>
+                    <button id="cancelPuzzle"
+                        class="px-5 py-2.5 rounded-lg bg-gray-500 text-white font-semibold hover:bg-gray-400 transition">
+                        Batal
+                    </button>
+                </div>
+                <p id="errorMsg" class="text-red-400 mt-3 hidden text-sm italic">Angka yang kamu masukan Salah!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✦ Modal Surat Harry Potter -->
+    <div id="letterModal"
+        class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 transition">
+        <div
+            class="relative bg-gradient-to-b from-[#1a140d] to-[#2a2117] rounded-2xl shadow-2xl max-w-lg w-full text-amber-100 border border-amber-800/30 overflow-hidden">
+            
+            <div class="relative p-6 sm:p-8 text-center">
+                <img src="{{ asset('images/logo_hogwarts.png') }}" alt="Hogwarts Logo"
+                    class="h-16 mx-auto mb-3 opacity-90 drop-shadow-md">
+
+                <h2 class="text-2xl font-bold mb-2 tracking-wide text-amber-300">
+                    Surat dari Hogwarts
+                </h2>
+                <p class="text-sm italic mb-5 text-amber-200/90">
+                    Untuk Para Peserta Turnamen Triwizard
+                </p>
+
+                <div class="text-[15px] leading-relaxed text-amber-100">
+                    <p class="mb-3">
+                        <strong>Good job!</strong> ⚡<br>
+                        Kalian telah berhasil menemukan <em>surat yang tersembunyi</em>.
+                    </p>
+
+                    <p class="mb-4">
+                        Klue terakhir telah kalian temukan — dan klue itu adalah huruf
+                        <span class="font-bold text-amber-400 text-lg">A</span>.
+                    </p>
+
+                    <p class="mb-3">
+                        Sekarang, <strong>datangilah Kepala Sekolah</strong> dan sebutkan
+                        <span class="underline decoration-amber-400/70">semua klue</span> yang telah kalian temukan,
+                        diakhiri dengan huruf <strong>A</strong>.
+                    </p>
+
+                    <p class="mt-4 font-semibold text-amber-300">
+                        Jika kalian benar... maka kalian akan menerima <br>
+                        <span class="text-amber-400">Rune Terakhir — Rune Petir ⚡</span>
+                    </p>
+
+                    <p class="italic mt-5 text-amber-500">
+                        “Hanya mereka yang menyatukan potongan rahasia, yang akan memanggil kekuatan petir sejati.”
+                    </p>
+                </div>
+
+                <div class="mt-6">
+                    <button id="closeLetter"
+                        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-amber-600 text-[#1b1408] font-semibold hover:bg-amber-500 active:scale-[.98] transition">
+                        Tutup Surat
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✦ Script -->
+    <script>
+        const openPuzzle = document.getElementById('openPuzzle');
+        const puzzleModal = document.getElementById('puzzleModal');
+        const letterModal = document.getElementById('letterModal');
+        const checkCode = document.getElementById('checkCode');
+        const cancelPuzzle = document.getElementById('cancelPuzzle');
+        const closeLetter = document.getElementById('closeLetter');
+        const magicCode = document.getElementById('magicCode');
+        const errorMsg = document.getElementById('errorMsg');
+
+        const correctCode = "261025"; 
+
+        // buka modal angka
+        openPuzzle.addEventListener('click', (e) => {
+            e.preventDefault();
+            puzzleModal.classList.remove('hidden');
+        });
+
+        // tombol batal
+        cancelPuzzle.addEventListener('click', () => {
+            puzzleModal.classList.add('hidden');
+            errorMsg.classList.add('hidden');
+            magicCode.value = '';
+        });
+
+        // cek kode
+        checkCode.addEventListener('click', () => {
+            if (magicCode.value === correctCode) {
+                puzzleModal.classList.add('hidden');
+                letterModal.classList.remove('hidden');
+                errorMsg.classList.add('hidden');
+                magicCode.value = '';
+            } else {
+                errorMsg.classList.remove('hidden');
+                puzzleModal.classList.add('animate-shake');
+                setTimeout(() => puzzleModal.classList.remove('animate-shake'), 500);
+            }
+        });
+
+        // tutup surat
+        closeLetter.addEventListener('click', () => {
+            letterModal.classList.add('hidden');
+        });
+
+        // animasi getar kecil
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                20%, 60% { transform: translateX(-6px); }
+                40%, 80% { transform: translateX(6px); }
+            }
+            .animate-shake { animation: shake 0.4s; }
+        `;
+        document.head.appendChild(style);
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const starLink = document.getElementById('openLetter');
+            const modal = document.getElementById('letterModal');
+            const closeBtn = document.getElementById('closeLetter');
+
+            if (starLink && modal && closeBtn) {
+                starLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                });
+
+                closeBtn.addEventListener('click', function() {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                });
+
+                // Tutup modal dengan klik di luar surat
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        modal.classList.add('hidden');
+                        modal.classList.remove('flex');
+                    }
+                });
+            }
+        });
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

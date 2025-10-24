@@ -72,6 +72,16 @@
         </p>
       </div>
     </div>
+    
+    <!-- ✉️ Icon Surat -->
+    <div class="">
+      <button id="openZonk" 
+        class="bg-amber-600 hover:bg-amber-500 text-[#1b1408] w-12 h-12 rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-all duration-300">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l9 6 9-6M3 8v8a2 2 0 002 2h14a2 2 0 002-2V8m-9 6l9-6"/>
+        </svg>
+      </button>
+    </div>
 
     <!-- Catatan footer kecil -->
     <p class="mt-6 text-center text-xs text-amber-100/60">© {{ date('Y') }} Hogwarts — Triwizard House Cup</p>

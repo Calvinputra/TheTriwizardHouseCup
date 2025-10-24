@@ -126,20 +126,20 @@
                             @if ($members->count() > 0)
                                 <ul class="list-disc pl-5 space-y-1 text-blue-100/80">
                                    @php
-                                        $ketuaList = ["Yunita", "Anastazia", "Jeremy Cristiano Prandaka", "Shelomita Manuela"];
+                                        $ketuaList = ["Yunita", "Patricia Allyssa", "Jeremy Cristiano Prandaka", "Shelomita Manuela"];
                                         $ketua = $members->filter(fn($m) => in_array($m->name, $ketuaList));
                                         $anggota = $members->reject(fn($m) => in_array($m->name, $ketuaList));
                                     @endphp
 
                                     @foreach ($ketua as $m)
                                         <li class="font-semibold text-yellow-300">
-                                            {{ $m->nickname }}
+                                            {{ $m->name }}
                                             <span class="ml-1 text-xs bg-yellow-500/20 text-yellow-300 px-2 py-0.5 rounded-full">Ketua</span>
                                         </li>
                                     @endforeach
 
                                     @foreach ($anggota as $m)
-                                        <li>{{ $m->nickname }}
+                                        <li>{{ $m->name }}
                                         </li>
                                     @endforeach
                                 </ul>

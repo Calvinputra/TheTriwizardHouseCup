@@ -42,7 +42,71 @@
   <div class="mx-auto">
 
     @yield('content')
+    <!-- ✉️ Modal Surat ZONK -->
+  <div id="zonkModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 transition">
+      <div class="relative bg-gradient-to-b from-[#2b0000] to-[#4a0505] rounded-2xl shadow-2xl max-w-md w-full text-red-100 border border-red-800/40 overflow-hidden">
+          <div class="relative p-6 text-center">
+              <img src="{{ asset('images/logo_hogwarts.png') }}" alt="Zonk Letter"
+                  class="h-20 mx-auto mb-4 animate-bounce-slow drop-shadow-md">
+              <h2 class="text-3xl font-extrabold mb-2 tracking-wide text-red-400">ZONK!</h2>
+              <p class="text-base text-red-200 italic mb-4">Ups... Sepertinya salah Klik itu salah.</p>
+              <p class="text-sm mb-5 text-red-300/90">
+                  Surat ini hanyalah jebakan 🤪🤪<br>
+                  Coba lagi — 🤪🤪🤪
+              </p>
+              <button id="closeZonk"
+                  class="px-5 py-2.5 rounded-lg bg-red-600 text-[#1b0000] font-semibold hover:bg-red-500 active:scale-[.98] transition">
+                  Tutup Surat Zonk
+              </button>
+          </div>
+      </div>
   </div>
+
+  </div>
+
+  <script>
+      // Ambil elemen dari modal ZONK
+      const openZonk = document.getElementById('openZonk'); // tombol ikon surat ZONK (jika ada)
+      const zonkModal = document.getElementById('zonkModal');
+      const closeZonk = document.getElementById('closeZonk');
+
+      // Buka modal ZONK
+      if (openZonk) {
+          openZonk.addEventListener('click', (e) => {
+              e.preventDefault();
+              zonkModal.classList.remove('hidden');
+              // Efek muncul lembut
+              zonkModal.classList.add('animate-fadein');
+          });
+      }
+
+      // Tutup modal ZONK
+      if (closeZonk) {
+          closeZonk.addEventListener('click', () => {
+              zonkModal.classList.add('hidden');
+          });
+      }
+
+      // Tambahkan animasi CSS lembut
+      const style = document.createElement('style');
+      style.innerHTML = `
+          @keyframes fadein {
+              from { opacity: 0; transform: scale(0.95); }
+              to { opacity: 1; transform: scale(1); }
+          }
+          .animate-fadein {
+              animation: fadein 0.4s ease-out;
+          }
+          @keyframes bounce-slow {
+              0%, 100% { transform: translateY(0); }
+              50% { transform: translateY(-10px); }
+          }
+          .animate-bounce-slow {
+              animation: bounce-slow 2s infinite;
+          }
+      `;
+      document.head.appendChild(style);
+  </script>
 
   <script>
     function confirmDelete(formId) {
