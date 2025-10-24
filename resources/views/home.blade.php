@@ -380,9 +380,11 @@
 
                 <ul class="list-disc list-inside text-amber-100/70 text-sm mb-4 space-y-1">
                     <li>A + B = 10</li>
-                    <li>B + C = 14</li>
-                    <li>C + D = 16</li>
-                    <li>D - A = 6</li>
+                    <li>B + C = 15</li>
+                    <li>C + D = 17</li>
+                    <li>A + D = 12</li>
+                    <li>D − B = 2</li>
+                    <li>C − A = 5</li>
                 </ul>
 
                 <p class="text-sm text-amber-200 italic mb-4">
@@ -477,7 +479,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Jawaban benar: A=2, B=8, C=6, D=10
-        if (A === 2 && B === 8 && C === 6 && D === 10) {
+        if (A === 4 && B === 6 && C === 9 && D === 8) {
             resultText.textContent = "✨ Benar! Keempat ramuan seimbang sempurna — meja pun terbuka!";
             resultText.classList.add('text-emerald-400');
         } else {
