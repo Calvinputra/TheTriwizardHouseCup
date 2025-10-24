@@ -338,11 +338,168 @@
                     </div>
                 </div>
 
+<!-- ✦ Enchanted Library Challenge -->
+<div class="rounded-xl border border-amber-400/30 bg-[#151019]/70 p-6 mt-8 shadow-lg relative overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,215,128,0.06),transparent_70%)] pointer-events-none"></div>
+
+    <div class="relative z-10">
+        <h3 class="text-lg sm:text-xl font-bold text-amber-300 mb-2">📜 Enchanted Library</h3>
+        <p class="text-sm text-amber-100/80 mb-5 italic">
+            Di balik rak buku berdebu, tersembunyi teka-teki bagi para Student.  
+            Masukkan <strong>kode rahasia</strong> untuk membuka pertanyaan kuno.
+        </p>
+
+        <!-- Input kode -->
+        <div class="flex flex-col sm:flex-row items-center gap-3 mb-6">
+            <input id="libraryCode" type="text" maxlength="20" placeholder="Masukkan Kode Rahasia..."
+                class="flex-1 px-4 py-2 rounded-lg bg-transparent border border-amber-500/40 text-amber-100 placeholder:text-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-400 text-center font-semibold uppercase tracking-wide">
+            <button id="verifyCodeBtn"
+                class="px-4 py-2 rounded-lg bg-amber-600 text-[#1b1408] font-semibold hover:bg-amber-500 active:scale-95 transition">
+                Buka Pustaka
+            </button>
+        </div>
+
+        <!-- Area soal tersembunyi -->
+        <div id="libraryQuestions" class="hidden space-y-6">
+            <p class="text-sm text-amber-200/80 italic mb-4">
+                Soal tingkat Expert — hanya mereka yang berpikir logis akan berhasil.
+            </p>
+
+            <!-- Soal -->
+            <div class="bg-[#1b1622]/70 border border-amber-400/20 rounded-xl p-5 relative overflow-hidden">
+                <div class="absolute right-4 top-4 text-amber-400/20 text-5xl select-none pointer-events-none">🧩</div>
+                <p class="font-semibold text-amber-300 mb-3">
+                    🧠 Teka-Teki Profesor Vector: “Meja Empat Ramuan”
+                </p>
+
+                <p class="text-sm text-amber-100/90 leading-relaxed mb-4">
+                    Di meja Profesor Vector terdapat empat botol bertanda huruf <strong>A</strong>, <strong>B</strong>,
+                    <strong>C</strong>, dan <strong>D</strong>.  
+                    Catatan di bukunya berbunyi:
+                </p>
+
+                <ul class="list-disc list-inside text-amber-100/70 text-sm mb-4 space-y-1">
+                    <li>A + B = 10</li>
+                    <li>B + C = 14</li>
+                    <li>C + D = 16</li>
+                    <li>D - A = 6</li>
+                </ul>
+
+                <p class="text-sm text-amber-200 italic mb-4">
+                    “Isi setiap botol dengan angka yang tepat untuk membuka rahasia meja ini.”  
+                    <span class="text-amber-400">Jika keempat botol diisi dengan benar, meja akan terbuka.</span>
+                </p>
+
+                <!-- Input jawaban -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
+                    <div>
+                        <label class="text-amber-300 text-sm font-semibold">A :</label>
+                        <input id="ansA" type="number" placeholder="..."
+                            class="w-full px-3 py-2 mt-1 rounded-lg bg-transparent border border-amber-400/30 text-amber-100 text-center placeholder:text-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-400">
+                    </div>
+                    <div>
+                        <label class="text-amber-300 text-sm font-semibold">B :</label>
+                        <input id="ansB" type="number" placeholder="..."
+                            class="w-full px-3 py-2 mt-1 rounded-lg bg-transparent border border-amber-400/30 text-amber-100 text-center placeholder:text-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-400">
+                    </div>
+                    <div>
+                        <label class="text-amber-300 text-sm font-semibold">C :</label>
+                        <input id="ansC" type="number" placeholder="..."
+                            class="w-full px-3 py-2 mt-1 rounded-lg bg-transparent border border-amber-400/30 text-amber-100 text-center placeholder:text-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-400">
+                    </div>
+                    <div>
+                        <label class="text-amber-300 text-sm font-semibold">D :</label>
+                        <input id="ansD" type="number" placeholder="..."
+                            class="w-full px-3 py-2 mt-1 rounded-lg bg-transparent border border-amber-400/30 text-amber-100 text-center placeholder:text-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-400">
+                    </div>
+                </div>
+
+                <!-- Tombol -->
+                <button id="submitAnswers"
+                    class="mt-5 w-full px-4 py-2 rounded-lg bg-amber-600 text-[#1b1408] font-semibold hover:bg-amber-500 active:scale-95 transition">
+                    Kirim Jawaban
+                </button>
+
+                <div id="resultText" class="mt-4 text-center text-sm font-semibold hidden"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
             </div>
         </main>
     </div>
 
 
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const codeInput = document.getElementById('libraryCode');
+    const verifyBtn = document.getElementById('verifyCodeBtn');
+    const questionBlock = document.getElementById('libraryQuestions');
+    const resultText = document.getElementById('resultText');
+    const inputs = {
+        A: document.getElementById('ansA'),
+        B: document.getElementById('ansB'),
+        C: document.getElementById('ansC'),
+        D: document.getElementById('ansD')
+    };
+
+    // 🔐 Kode Rahasia
+    verifyBtn.addEventListener('click', () => {
+        const val = codeInput.value.trim().toLowerCase();
+        if (val === 'enchanted library') {
+            questionBlock.classList.remove('hidden');
+            questionBlock.classList.add('animate-fadein');
+            verifyBtn.disabled = true;
+            codeInput.disabled = true;
+            verifyBtn.innerText = '✨ Pustaka Terbuka';
+        } else {
+            alert('Kode salah! Petunjuk: gunakan kata “Enchanted Library”.');
+        }
+    });
+
+    // 🧩 Cek Jawaban
+    document.getElementById('submitAnswers').addEventListener('click', () => {
+        const A = parseFloat(inputs.A.value);
+        const B = parseFloat(inputs.B.value);
+        const C = parseFloat(inputs.C.value);
+        const D = parseFloat(inputs.D.value);
+
+        resultText.classList.remove('hidden', 'text-emerald-400', 'text-rose-400', 'text-amber-400');
+        resultText.classList.add('animate-fadein');
+
+        if ([A, B, C, D].some(isNaN)) {
+            resultText.textContent = "⚠️ Lengkapi semua kolom A, B, C, dan D terlebih dahulu.";
+            resultText.classList.add('text-amber-400');
+            return;
+        }
+
+        // Jawaban benar: A=2, B=8, C=6, D=10
+        if (A === 2 && B === 8 && C === 6 && D === 10) {
+            resultText.textContent = "✨ Benar! Keempat ramuan seimbang sempurna — meja pun terbuka!";
+            resultText.classList.add('text-emerald-400');
+        } else {
+            resultText.textContent = "💀 Belum tepat... perhatikan hubungan antar persamaan dengan saksama.";
+            resultText.classList.add('text-rose-400');
+        }
+    });
+
+    // ✨ Animasi halus
+    const style = document.createElement('style');
+    style.innerHTML = `
+        @keyframes fadein {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadein {
+            animation: fadein 0.4s ease-out forwards;
+        }
+    `;
+    document.head.appendChild(style);
+});
+</script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const vid = document.getElementById('houseVideo');
