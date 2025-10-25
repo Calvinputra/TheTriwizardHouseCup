@@ -133,13 +133,13 @@
 
                                     @foreach ($ketua as $m)
                                         <li class="font-semibold text-yellow-300">
-                                            {{ $m->name }}
+                                            {{ $m->name }} - {{ $m->nickname }}
                                             <span class="ml-1 text-xs bg-yellow-500/20 text-yellow-300 px-2 py-0.5 rounded-full">Ketua</span>
                                         </li>
                                     @endforeach
 
                                     @foreach ($anggota as $m)
-                                        <li>{{ $m->name }}
+                                        <li>{{ $m->name }} - {{ $m->nickname }}
                                         </li>
                                     @endforeach
                                 </ul>
